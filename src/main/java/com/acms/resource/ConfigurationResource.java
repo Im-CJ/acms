@@ -1,6 +1,6 @@
 package com.acms.resource;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -12,7 +12,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.acms.entity.ConfigurationEntity;
 import com.acms.model.Configuration;
 
 @Path("configuration")
@@ -24,7 +23,7 @@ public interface ConfigurationResource {
 	public Configuration saveConfiguration(Configuration configuration);
 	
 	@GET
-	public Collection<ConfigurationEntity> getAllConfigurations();
+	public List<Configuration> getAllConfigurations();
 	
 	@Path("{id}")
 	@GET

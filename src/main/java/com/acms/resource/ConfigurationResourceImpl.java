@@ -1,7 +1,9 @@
 package com.acms.resource;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -15,9 +17,17 @@ public class ConfigurationResourceImpl implements ConfigurationResource {
 	@Autowired
 	private ConfigurationService configurationService;
 
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	@Override
-	public Collection<ConfigurationEntity> getAllConfigurations() {
-		return configurationService.getAllConfigurations();
+	public List<Configuration> getAllConfigurations() {
+		return configurationService.getAllConfigurations().stream().map(this::convertToModel)
+				.collect(Collectors.toList());
+	}
+
+	private Configuration convertToModel(ConfigurationEntity configEntity) {
+		return modelMapper.map(configEntity, Configuration.class);
 	}
 
 	@Override
