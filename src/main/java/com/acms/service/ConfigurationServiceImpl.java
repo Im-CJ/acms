@@ -24,21 +24,46 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	@Override
 	public Collection<ConfigurationEntity> getAllConfigurations() {
-		return (Collection<ConfigurationEntity>) repository.findAll();
+		return (Collection<ConfigurationEntity>) repository.findAllByDeleted(Boolean.FALSE);
 	}
 
 	@Override
 	public Configuration saveConfiguration(Configuration configuration, boolean isSave) {
+		ConfigurationEntity configurationEntity = null;
 		if(isSave) {
 			configuration.setCreatedTime(new Timestamp(new Date().getTime()));
+			configurationEntity = modelMapper.map(configuration, ConfigurationEntity.class);
 		}else {
-			configuration.setUpdatedTime(new Timestamp(new Date().getTime()));
+			Optional<ConfigurationEntity> configurations = repository.findById(configuration.getId());
+			configurationEntity = configurations.get();
+			configurationEntity.setUpdatedTime(new Timestamp(new Date().getTime()));
+			setNewValues(configurationEntity, configuration);
 		}
-		ConfigurationEntity configurationEntity = modelMapper.map(configuration, ConfigurationEntity.class);
 		repository.save(configurationEntity);
 		return modelMapper.map(configurationEntity, Configuration.class);
 	}
 
+	private void setNewValues(ConfigurationEntity configurationEntity, Configuration configuration) {
+		if(configuration.getCategory() != null) {
+			configurationEntity.setCategory(configuration.getCategory());
+		}
+		if(configuration.getConfigDescription() != null) {
+			configurationEntity.setConfigDescription(configuration.getConfigDescription());
+		}
+		if(configuration.getConfigName() != null) {
+			configurationEntity.setConfigName(configuration.getConfigName());
+		}
+		if(configuration.getDisplayName() != null) {
+			configurationEntity.setDisplayName(configuration.getDisplayName());
+		}
+		if(configuration.getDataType() != null) {
+			configurationEntity.setDataType(configuration.getDataType());
+		}
+		if(configuration.getConfigValue() != null) {
+			configurationEntity.setConfigValue(configuration.getConfigValue());
+		}		
+	}
+	
 	@Override
 	public Configuration getConfigurationById(Integer id) {
 		Optional<ConfigurationEntity> configurations = repository.findById(id);
@@ -47,9 +72,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	@Override
 	public boolean deleteConfiguration(Configuration configuration) {
+		Optional<ConfigurationEntity> configurations = repository.findById(configuration.getId());
+		ConfigurationEntity configurationEntity = modelMapper.map(configurations.get(), ConfigurationEntity.class);
 		configuration.setDeleted(Boolean.TRUE);
 		configuration.setUpdatedTime(new Timestamp(new Date().getTime()));
-		ConfigurationEntity configurationEntity = modelMapper.map(configuration, ConfigurationEntity.class);
 		repository.save(configurationEntity);
 		return configurationEntity.isDeleted();
 	}

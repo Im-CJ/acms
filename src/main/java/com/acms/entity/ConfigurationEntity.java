@@ -27,6 +27,8 @@ public class ConfigurationEntity {
 	private String dataType;
 
 	private String category;
+	
+	private String configValue;
 
 	private boolean deleted;
 
@@ -84,6 +86,14 @@ public class ConfigurationEntity {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	
+	public String getConfigValue() {
+		return configValue;
+	}
+
+	public void setConfigValue(String configValue) {
+		this.configValue = configValue;
 	}
 
 	public boolean isDeleted() {

@@ -23,6 +23,8 @@ public class Configuration {
 
 	private boolean deleted;
 	
+	private String configValue;
+	
 	private String createdBy;
 
 	private Timestamp createdTime;
@@ -77,6 +79,14 @@ public class Configuration {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public String getConfigValue() {
+		return configValue;
+	}
+
+	public void setConfigValue(String configValue) {
+		this.configValue = configValue;
 	}
 
 	public boolean isDeleted() {

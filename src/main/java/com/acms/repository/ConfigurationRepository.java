@@ -1,5 +1,6 @@
 package com.acms.repository;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -13,5 +14,7 @@ import com.acms.entity.ConfigurationEntity;
 public interface ConfigurationRepository extends CrudRepository<ConfigurationEntity, Integer> {
 
 	Optional<ConfigurationEntity> findById(Integer id);
+	
+	Collection<ConfigurationEntity> findAllByDeleted(Boolean isDeleted);
 
 }
