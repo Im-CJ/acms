@@ -5,19 +5,14 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.acms.exception.BadRequestException;
 import com.acms.model.ErrorTO;
 import com.acms.model.ExceptionTO;
 
 @Provider
 public class ExceptionHandler implements ExceptionMapper<Exception> {
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public Response toResponse(Exception ex) {
-		logger.error("An exception occurred with message: {}", buildErrorMessage(ex));
 
 		String exMsg;
 		Status status;
@@ -37,9 +32,4 @@ public class ExceptionHandler implements ExceptionMapper<Exception> {
 		return Response.status(status).entity(response).build();
 	}
 
-	private String buildErrorMessage(Exception ex) {
-		Throwable cause = ex.getCause();
-
-		return cause == null ? ex.getMessage() : cause.getMessage();
-	}
 }

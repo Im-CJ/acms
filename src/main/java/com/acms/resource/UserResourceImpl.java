@@ -8,10 +8,14 @@ import com.acms.service.UserService;
 
 @Controller
 public class UserResourceImpl implements UserResource {
+	
+	private final UserService userService;
 
-	@Autowired
-	private UserService userService;
-
+    @Autowired
+    public UserResourceImpl(UserService userService) {
+        this.userService = userService;
+    }
+    
 	@Override
 	public boolean validateUser(User user) {
 		return userService.validateUser(user);

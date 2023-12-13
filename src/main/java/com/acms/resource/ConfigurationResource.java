@@ -27,11 +27,12 @@ public interface ConfigurationResource {
 	
 	@Path("{id}")
 	@GET
-	public Configuration getById(@PathParam("id") Integer id);	
+	public Configuration getById(@PathParam("id") int id);	
 	
 	@PATCH
 	public Configuration updateConfiguration(Configuration configuration);
 	
+	@Path("{id}")
 	@DELETE
-	public boolean deleteConfiguration(Configuration configuration);
+	public boolean deleteConfiguration(@PathParam("id") int id);
 }

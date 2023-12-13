@@ -16,15 +16,19 @@ import com.acms.repository.ConfigurationRepository;
 @Service
 public class ConfigurationServiceImpl implements ConfigurationService {
 
-	@Autowired
-	private ConfigurationRepository repository;
+	private final ConfigurationRepository repository;
 
-	@Autowired
-	private ModelMapper modelMapper;
+	private final ModelMapper modelMapper;
 
+    @Autowired
+    public ConfigurationServiceImpl(ConfigurationRepository repository) {
+        this.repository = repository;
+		this.modelMapper = new ModelMapper();
+    }
+    
 	@Override
 	public Collection<ConfigurationEntity> getAllConfigurations() {
-		return (Collection<ConfigurationEntity>) repository.findAllByDeleted(Boolean.FALSE);
+		return repository.findAllByDeleted(Boolean.FALSE);
 	}
 
 	@Override
@@ -35,7 +39,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			configurationEntity = modelMapper.map(configuration, ConfigurationEntity.class);
 		}else {
 			Optional<ConfigurationEntity> configurations = repository.findById(configuration.getId());
-			configurationEntity = configurations.get();
+			configurationEntity = configurations.isPresent() ? configurations.get() : new ConfigurationEntity();
 			configurationEntity.setUpdatedTime(new Timestamp(new Date().getTime()));
 			setNewValues(configurationEntity, configuration);
 		}
@@ -65,17 +69,22 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	}
 	
 	@Override
-	public Configuration getConfigurationById(Integer id) {
-		Optional<ConfigurationEntity> configurations = repository.findById(id);
-		return modelMapper.map(configurations.get(), Configuration.class);
+	public Configuration getConfigurationById(int id) {
+		return modelMapper.map(getConfigurationEntityById(id), Configuration.class);
 	}
 
-	@Override
-	public boolean deleteConfiguration(Configuration configuration) {
-		Optional<ConfigurationEntity> configurations = repository.findById(configuration.getId());
-		ConfigurationEntity configurationEntity = modelMapper.map(configurations.get(), ConfigurationEntity.class);
-		configuration.setDeleted(Boolean.TRUE);
-		configuration.setUpdatedTime(new Timestamp(new Date().getTime()));
+	private ConfigurationEntity getConfigurationEntityById(int id) {
+		Optional<ConfigurationEntity> configurations = repository.findById(id);
+		if(configurations.isPresent())
+			return configurations.get();	
+		else
+			return new ConfigurationEntity();
+	}
+	
+	public boolean deleteConfiguration(int id) {
+		ConfigurationEntity configurationEntity = getConfigurationEntityById(id);
+		configurationEntity.setDeleted(Boolean.TRUE);
+		configurationEntity.setUpdatedTime(new Timestamp(new Date().getTime()));
 		repository.save(configurationEntity);
 		return configurationEntity.isDeleted();
 	}

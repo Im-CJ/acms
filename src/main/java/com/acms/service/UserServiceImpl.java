@@ -13,9 +13,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public boolean validateUser(User user) {
-		if(USER.equals(user.getUserName()) && USER.equals(user.getPassword())) {
-			return Boolean.TRUE;
-		}else if(ADMIN.equals(user.getUserName()) && ADMIN.equals(user.getPassword())) {
+		if((USER.equals(user.getUserName()) && USER.equals(user.getPassword())) || (ADMIN.equals(user.getUserName()) && ADMIN.equals(user.getPassword()))) {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;

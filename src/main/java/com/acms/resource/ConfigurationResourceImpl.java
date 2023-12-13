@@ -14,12 +14,17 @@ import com.acms.service.ConfigurationService;
 @Controller
 public class ConfigurationResourceImpl implements ConfigurationResource {
 
-	@Autowired
-	private ConfigurationService configurationService;
-
-	@Autowired
-	private ModelMapper modelMapper;
 	
+	private final ConfigurationService configurationService;
+	
+	private final ModelMapper modelMapper;
+	
+    @Autowired
+    public ConfigurationResourceImpl(ConfigurationService configurationService) {
+        this.configurationService = configurationService;
+		this.modelMapper = new ModelMapper();
+    }
+
 	@Override
 	public List<Configuration> getAllConfigurations() {
 		return configurationService.getAllConfigurations().stream().map(this::convertToModel)
@@ -37,7 +42,7 @@ public class ConfigurationResourceImpl implements ConfigurationResource {
 	}
 
 	@Override
-	public Configuration getById(Integer id) {
+	public Configuration getById(int id) {
 		return configurationService.getConfigurationById(id);
 	}
 
@@ -48,8 +53,8 @@ public class ConfigurationResourceImpl implements ConfigurationResource {
 	}
 
 	@Override
-	public boolean deleteConfiguration(Configuration configuration) {
-		return configurationService.deleteConfiguration(configuration);
+	public boolean deleteConfiguration(int id) {
+		return configurationService.deleteConfiguration(id);
 	}
 
 }

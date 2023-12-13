@@ -11,7 +11,7 @@ public interface ConfigurationService {
 	
 	Configuration saveConfiguration(Configuration configuration, boolean isSave);
 	
-	Configuration getConfigurationById(Integer id);
+	Configuration getConfigurationById(int id);
 	 
-	boolean deleteConfiguration(Configuration configuration);
+	boolean deleteConfiguration(int id);
 }
