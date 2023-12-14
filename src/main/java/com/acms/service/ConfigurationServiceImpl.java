@@ -19,6 +19,8 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	private final ConfigurationRepository repository;
 
 	private final ModelMapper modelMapper;
+	
+	private static final String ADMIN= "admin";
 
     @Autowired
     public ConfigurationServiceImpl(ConfigurationRepository repository) {
@@ -65,7 +67,8 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		}
 		if(configuration.getConfigValue() != null) {
 			configurationEntity.setConfigValue(configuration.getConfigValue());
-		}		
+		}
+		configurationEntity.setUpdatedBy(configuration.getUpdatedBy());
 	}
 	
 	@Override
@@ -84,6 +87,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	public boolean deleteConfiguration(int id) {
 		ConfigurationEntity configurationEntity = getConfigurationEntityById(id);
 		configurationEntity.setDeleted(Boolean.TRUE);
+		configurationEntity.setUpdatedBy(ADMIN);
 		configurationEntity.setUpdatedTime(new Timestamp(new Date().getTime()));
 		repository.save(configurationEntity);
 		return configurationEntity.isDeleted();
